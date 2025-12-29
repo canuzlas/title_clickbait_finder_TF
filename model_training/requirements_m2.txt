@@ -1,0 +1,10 @@
+tensorflow-macos
+tensorflow-metal
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+pickle-mixin
+h5py<3.13
+deep-translator
