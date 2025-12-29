@@ -1,214 +1,177 @@
 # 🎯 Clickbait Avcısı (Clickbait Hunter)
 
-Full-Stack AI projesi: Haber başlıklarının clickbait olup olmadığını yapay zeka ile tespit eden uçtan uca bir uygulama.
-
 ![Project Status](https://img.shields.io/badge/status-active-success.svg)
 ![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
 ![TensorFlow](https://img.shields.io/badge/tensorflow-2.13+-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-## 📂 Proje Yapısı
+**Clickbait Avcısı**, haber başlıklarının "tık tuzağı" (clickbait) olup olmadığını Yapay Zeka (AI) ve Doğal Dil İşleme (NLP) teknolojileriyle analiz eden kapsamlı bir Full-Stack projesidir.
+
+Proje, modern web teknolojilerini ve gelişmiş derin öğrenme modellerini birleştirerek kullanıcıların manipülatif başlıklara karşı bilinçlenmesini sağlar.
+
+---
+
+## 🌟 Özellikler
+
+-   **🧠 Gelişmiş AI Modeli**: TensorFlow ve Keras ile eğitilmiş, yüksek doğruluklu metin sınıflandırma modeli.
+-   **🔌 RESTful API**: FastAPI tabanlı, hızlı ve ölçeklenebilir backend servisi.
+-   **📊 İnteraktif Dashboard**: Streamlit ile geliştirilmiş, kullanıcı dostu analiz arayüzü.
+-   **🌍 Çoklu Dil Desteği**: Türkçe ve İngilizce başlıkları otomatik algılayıp analiz edebilme (Deep Translator entegrasyonu).
+-   **🧩 Chrome Eklentisi**: Tarayıcı üzerinde gezindiğiniz haber sitelerindeki başlıkları anlık olarak analiz etme imkanı.
+-   **🍎 Apple Silicon Desteği**: Mac M1/M2/M3 işlemciler için optimize edilmiş GPU hızlandırmalı kurulum.
+
+---
+
+## 📂 Proje Mimarisi
 
 ```
-clickbait-hunter/
+news_title_clickbait_alarm/
 ├── model_training/          # 🧠 AI Model Eğitimi
-│   ├── train_model.ipynb    # Jupyter Notebook
-│   ├── clickbait_data.csv   # Veri seti (Kaggle'dan indirilecek)
-│   ├── saved_model.h5       # Eğitilmiş model
-│   ├── tokenizer.pickle     # Metin tokenizer
-│   └── model_config.pickle  # Model konfigürasyonu
+│   ├── train.py             # Python Script (Eğitim Süreci)
+│   ├── clickbait_data.csv   # Veri Seti
+│   └── ...                  # Model çıktıları (.h5, .pickle)
 │
-├── app_streamlit/           # 📊 Streamlit Dashboard
-│   ├── app.py               # Ana uygulama
-│   └── requirements.txt     # Bağımlılıklar
+├── backend_api/             # � Backend API
+│   ├── main.py              # FastAPI Uygulaması
+│   └── requirements.txt     # API Bağımlılıkları
 │
-├── backend_api/             # 🔌 FastAPI Backend
-│   ├── main.py              # API sunucusu
-│   └── requirements.txt     # Bağımlılıklar
+├── app_streamlit/           # � Kullanıcı Arayüzü
+│   ├── app.py               # Streamlit Dashboard
+│   └── requirements.txt     # UI Bağımlılıkları
 │
-└── chrome_extension/        # 🧩 Chrome Eklentisi
-    ├── manifest.json        # Eklenti yapılandırması
-    ├── popup.html           # Kullanıcı arayüzü
-    ├── popup.js             # JavaScript mantığı
-    └── icons/               # Eklenti ikonları
+├── chrome_extension/        # 🧩 Tarayıcı Eklentisi
+│   ├── manifest.json        # Eklenti Konfigürasyonu
+│   ├── popup.html           # Eklenti Arayüzü
+│   └── ...
+│
+└── debug_model.py           # 🛠️ Hızlı Test Aracı
 ```
 
-## 🚀 Hızlı Başlangıç
+---
 
-### 1️⃣ Bağımlılıkları Yükle
+## 🚀 Kurulum Rehberi
+
+### Ön Gereksinimler
+
+-   Python 3.9 veya üzeri
+-   [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (Önerilen) veya `pip`
+
+### 🍎 Mac M2 / Apple Silicon Kurulumu (Önemli!)
+
+Mac M1/M2/M3 kullanıcıları, GPU hızlandırmasından (Metal Performance Shaders) yararlanmak için aşağıdaki adımları takip etmelidir:
 
 ```bash
-# Model eğitimi için
-cd model_training
-pip install tensorflow pandas numpy scikit-learn matplotlib seaborn jupyter
+# 1. Yeni bir Conda ortamı oluşturun
+conda create -n clickbait_m2 python=3.9 -y
+conda activate clickbait_m2
 
-# Streamlit için
-cd ../app_streamlit
-pip install -r requirements.txt
+# 2. Apple TensorFlow bağımlılıklarını yükleyin
+conda install -c apple tensorflow-deps -y
 
-# FastAPI için
-cd ../backend_api
-pip install -r requirements.txt
+# 3. Temel TensorFlow ve Metal eklentisini yükleyin
+pip install tensorflow-macos
+pip install tensorflow-metal
+
+# 4. Proje genel bağımlılıklarını yükleyin
+pip install pandas numpy scikit-learn matplotlib seaborn jupyter deep-translator fastapi uvicorn streamlit
 ```
 
-### 2️⃣ Modeli Eğit
+### 💻 Standart Kurulum (Windows / Linux / Intel Mac)
 
 ```bash
-cd model_training
-jupyter notebook train_model.ipynb
+# Sanal ortam oluşturun (Opsiyonel ama önerilir)
+python -m venv venv
+source venv/bin/activate  # Windows için: venv\Scripts\activate
+
+# Gerekli paketleri yükleyin
+pip install tensorflow pandas numpy scikit-learn matplotlib seaborn jupyter deep-translator fastapi uvicorn streamlit
 ```
 
-Not: Notebook'taki tüm hücreleri sırasıyla çalıştırın. Bu işlem:
-- Örnek veri seti oluşturur (veya Kaggle'dan indirdiğiniz veriyi kullanır)
-- Modeli eğitir
-- `saved_model.h5`, `tokenizer.pickle` ve `model_config.pickle` dosyalarını kaydeder
+---
 
-### 3️⃣ Streamlit Dashboard'u Başlat
+## 💡 Kullanım
 
+### Adım 1: Modeli Eğitin 🧠
+
+Sistemi kullanmaya başlamadan önce yapay zeka modelinin eğitilmesi gerekir.
+
+1.  `model_training` klasörüne gidin.
+2.  Eğitim scriptini çalıştırın:
+    ```bash
+    python train.py
+    ```
+3.  Bu işlem sonucunda `saved_model.h5`, `tokenizer.pickle` ve `model_config.pickle` dosyaları oluşturulacaktır.
+
+*Alternatif olarak hızlı test için:*
 ```bash
-cd app_streamlit
-streamlit run app.py
+python debug_model.py
 ```
 
-Tarayıcınızda `http://localhost:8501` adresini açın.
+### Adım 2: Backend API'yi Başlatın 🔌
 
-### 4️⃣ FastAPI Backend'i Başlat
+API, modelin dış dünyaya açılan kapısıdır. Chrome eklentisi ve diğer servisler bu API'yi kullanır.
 
 ```bash
 cd backend_api
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
+*API şu adreste çalışacaktır:* `http://localhost:8000`
+*Dokümantasyon:* `http://localhost:8000/docs`
 
-API dokümantasyonu: `http://localhost:8000/docs`
+### Adım 3: Dashboard'u Başlatın 📊
 
-### 5️⃣ Chrome Eklentisini Yükle
-
-1. Chrome'da `chrome://extensions/` adresini açın
-2. "Geliştirici modu"nu açın (sağ üst köşe)
-3. "Paketlenmemiş öğe yükle" butonuna tıklayın
-4. `chrome_extension` klasörünü seçin
-5. Eklenti yüklendi! 🎉
-
-## 📊 API Endpoints
-
-| Endpoint | Method | Açıklama |
-|----------|--------|----------|
-| `/` | GET | API ana sayfası |
-| `/health` | GET | Sağlık kontrolü |
-| `/predict` | POST | Tek başlık tahmini |
-| `/predict/batch` | POST | Toplu tahmin |
-| `/model/info` | GET | Model bilgisi |
-
-### Örnek İstek
+Görsel arayüz üzerinden analiz yapmak için Streamlit uygulamasını çalıştırın.
 
 ```bash
-curl -X POST "http://localhost:8000/predict" \
-     -H "Content-Type: application/json" \
-     -d '{"text": "Bu Videoyu İzledikten Sonra Hayatınız Değişecek!"}'
+cd app_streamlit
+streamlit run app.py
 ```
+*Tarayıcınızda otomatik olarak açılacaktır (Genellikle http://localhost:8501).*
 
-### Örnek Yanıt
+### Adım 4: Chrome Eklentisini Yükleyin 🧩
 
+1.  Google Chrome'u açın ve adres çubuğuna `chrome://extensions/` yazın.
+2.  Sağ üst köşedeki **"Geliştirici modu" (Developer mode)** anahtarını açın.
+3.  Sol üstte beliren **"Paketlenmemiş öğe yükle" (Load unpacked)** butonuna tıklayın.
+4.  Proje klasöründeki `chrome_extension` dizinini seçin.
+5.  Artık tarayıcınızın sağ üst köşesinde Clickbait Avcısı ikonunu görebilirsiniz! 🎉
+
+---
+
+## 📡 API Uç Noktaları (Endpoints)
+
+| Metot | Yol | Açıklama |
+| :--- | :--- | :--- |
+| `GET` | `/` | API durumunu kontrol eder. |
+| `GET` | `/active_model` | Yüklü modelin parametrelerini döndürür. |
+| `POST` | `/predict` | Tek bir başlığı analiz eder. |
+| `POST` | `/predict/batch` | Birden fazla başlığı aynı anda analiz eder. |
+
+**Örnek İstek (/predict):**
 ```json
 {
-    "is_clickbait": true,
-    "score": 0.92,
-    "confidence": 92.0,
-    "label": "CLICKBAIT"
+  "text": "Bu Videoyu İzledikten Sonra Hayatınız Değişecek!"
 }
 ```
 
-## 🧠 Model Mimarisi
-
-```
-Embedding (10000 vocab, 128 dim)
-    ↓
-GlobalAveragePooling1D
-    ↓
-Dense (64, ReLU) + Dropout (0.3)
-    ↓
-Dense (32, ReLU) + Dropout (0.2)
-    ↓
-Dense (1, Sigmoid) → 0-1 arası skor
-```
-
-## 🎯 Clickbait Tespit Kriterleri
-
-Model şu özellikleri öğrenir:
-- Abartılı ifadeler ("Şok!", "İnanılmaz!", "Muhteşem!")
-- Sayı listeleri ("10 şey", "5 sır")
-- Merak uyandıran yapılar ("...sizi şaşırtacak")
-- Soru kalıpları ("Biliyor musunuz?")
-- Clickbait'e özgü kelime dağarcığı
-
-## 📈 Performans
-
-- **Doğruluk (Accuracy)**: ~95%+
-- **Precision**: ~94%
-- **Recall**: ~96%
-- **F1-Score**: ~95%
-
-*Not: Gerçek performans veri setine bağlı olarak değişebilir.*
-
-## 🔧 Yapılandırma
-
-### Model Parametreleri (`model_training/train_model.ipynb`)
-
-```python
-VOCAB_SIZE = 10000    # Kelime dağarcığı boyutu
-MAX_LENGTH = 50       # Maksimum cümle uzunluğu
-EMBEDDING_DIM = 128   # Embedding boyutu
-```
-
-### API Yapılandırması (`backend_api/main.py`)
-
-```python
-# CORS ayarları (güvenlik için production'da düzenleyin)
-allow_origins=["*"]
-```
-
-## 📚 Veri Seti
-
-Önerilen veri setleri:
-- [Kaggle - Clickbait Dataset](https://www.kaggle.com/datasets/amananandrai/clickbait-dataset)
-- [Kaggle - News Headlines](https://www.kaggle.com/datasets/rmisra/news-headlines-dataset-for-sarcasm-detection)
-
-CSV formatı:
-```csv
-headline,clickbait
-"Normal haber başlığı",0
-"ŞOK! İnanılmaz gelişme!",1
-```
-
-## 🛠️ Teknoloji Stack
-
-| Bileşen | Teknoloji | Görev |
-|---------|-----------|-------|
-| Model | TensorFlow/Keras | Metin sınıflandırma |
-| Tokenizer | Pickle | Kelime→Sayı dönüşümü |
-| Dashboard | Streamlit | Görsel test arayüzü |
-| API | FastAPI | REST API servisi |
-| Extension | HTML/CSS/JS | Tarayıcı entegrasyonu |
+---
 
 ## 🤝 Katkıda Bulunma
 
-1. Bu repoyu fork edin
-2. Feature branch oluşturun (`git checkout -b feature/yeni-ozellik`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Yeni özellik eklendi'`)
-4. Branch'e push edin (`git push origin feature/yeni-ozellik`)
-5. Pull Request açın
+1.  Projeyi Fork'layın.
+2.  Yeni bir Branch oluşturun (`git checkout -b feature/HarikaOzellik`).
+3.  Değişikliklerinizi Commit'leyin (`git commit -m 'Harika bir özellik eklendi'`).
+4.  Branch'inizi Push'layın (`git push origin feature/HarikaOzellik`).
+5.  Bir Pull Request (PR) açın.
+
+---
 
 ## 📄 Lisans
 
-MIT License - Detaylar için [LICENSE](LICENSE) dosyasına bakın.
-
-## 👤 İletişim
-
-Sorularınız için issue açabilirsiniz.
+Bu proje MIT Lisansı ile lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakınız.
 
 ---
 
 <p align="center">
-  <strong>🎯 Clickbait Avcısı</strong><br>
-  <em>Full-Stack AI Projesi | 2025</em>
+  <strong>2025 | Clickbait Avcısı Projesi</strong>
 </p>
